@@ -6,7 +6,7 @@
 
 typedef struct link{
 	int data;
-	int* next;
+	struct link* next;
 
 }link_t;
 void dept_first_traversal(tree_t* node);

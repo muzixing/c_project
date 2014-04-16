@@ -2,27 +2,30 @@
 #include <stdio.h>
 #include "dept_first.h"
 
-link_t link_list[12];//need to fix the number by other better way.
-int i = 0;
-
-
+link_t *link_list[12]; //bad design.
+int num = 0;
 void dept_first_traversal(tree_t* node){
 	if (node->L_child!= NULL)
 	{
+		//printf("go left\n");
 		dept_first_traversal((tree_t*)node->L_child);
+		
 	}
 	if (node->flag == 0)
 	{
 		node->flag = 1;
-		printf("%d:", node->data);	
-		link_t * link = (link_t*)malloc(sizeof(link_t));
+		//printf("node->data:%d\n", node->data);	
+		link_t*  link = (link_t*)malloc(sizeof(link_t));
+		
 		link->data = node->data;
-		link_list[i++] = *link; //
+		//printf("link->data:%d\n",link->data);
+		link_list[num++] = link; //save link at array.
+	
 	}
-
 	if (node->R_child)
 	{
-		dept_first_traversal((tree_t*)node->R_child);/* code */
+		//printf("go right\n");
+		dept_first_traversal((tree_t*)node->R_child);
 	}
 	
 }
@@ -30,20 +33,23 @@ void dept_first_traversal(tree_t* node){
 link_t* DFS2LINK(tree_t* node)
 {
 	dept_first_traversal(node);
-	while(i)
+	while(--num)
 	{
-		link_list[i-1].next = (int*)link_list;
-		i--;
-	}
-	return link_list;
+		link_list[num-1]->next = link_list[num];
+		printf("link_list[%d]: %d\n", num,link_list[num]->data);
+	} 
+	link_list[0]->next =link_list[1];
+	printf("link_list[%d]: %d\n", num,link_list[num]->data);
+	return *link_list;
 }
 
 void print_link(link_t* node)
 {
-	while (node->next!=NULL)
+	do
 	{
-		printf("%d:",node->data);
-	}
-
+		printf("link_list->data:%d\n:",node->data);
+		node = node->next;
+	} while (node->next!=NULL);
+	printf("link_list->data:%d\n:",node->data);
 }
 
